@@ -1,13 +1,16 @@
 #!/bin/bash
+# export ANDROID_SDK_TOOLS=/Users/danhantao/dev/tools/bin/android/android-sdk-macosx/tools
+# export NDK_ROOT=/Users/danhantao/dev/tools/bin/android-ndk-r15c
 NDK_ROOT="${1:-${NDK_ROOT}}"
 
 ### ABIs setup
 #declare -a ANDROID_ABI_LIST=("x86" "x86_64" "armeabi-v7a with NEON" "arm64-v8a")
-declare -a ANDROID_ABI_LIST=("x86" "x86_64" "armeabi" "arm64-v8a" "armeabi-v7a" "mips" "mips64")
+declare -a ANDROID_ABI_LIST=("x86" "x86_64" "armeabi" "armeabi-v7a")
+# declare -a ANDROID_ABI_LIST=("arm64-v8a")
 
 ### path setup
-SCRIPT=$(readlink -f $0)
-WD=`dirname $SCRIPT`
+SCRIPT=$(stat -f $0)
+WD=$(pwd `dirname $SCRIPT`)
 OPENCV_ROOT="${WD}/opencv"
 N_JOBS=${N_JOBS:-4}
 
@@ -49,6 +52,8 @@ do
           -D BUILD_DOCS=OFF \
           -D BUILD_PERF_TESTS=OFF \
           -D BUILD_TESTS=OFF \
+          -D BUILD_ANDROID_PROJECTS=OFF \
+          -D OPENCV_ENABLE_NONFREE=ON \
           -DOPENCV_EXTRA_MODULES_PATH="${WD}/opencv_contrib/modules/"  \
           -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}/opencv" \
           ../..
